@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Codename Hennur — The Art Of Private Living</title>
+  <meta name="description" content="Codename Hennur — private luxury residences coming soon to Hennur Main Road, North Bengaluru." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            gold: '#c29c60',
+            goldLight: '#d4b47a',
+            paper: '#f8f8f8',
+            soft: '#f4f4f4',
+            ink: '#111111',
+            muted: '#444444'
+          },
+          fontFamily: {
+            seriflux: ['Cormorant Garamond', 'serif'],
+            sanslux: ['Jost', 'sans-serif']
+          },
+          keyframes: {
+            ticker: { '0%': { transform: 'translateX(0)' }, '100%': { transform: 'translateX(-50%)' } },
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-10px)' } }
+          },
+          animation: { ticker: 'ticker 32s linear infinite', float: 'float 5s ease-in-out infinite' }
+        }
+      }
+    }
+  </script>
+
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+  <style>
+    body { font-family: 'Jost', sans-serif; }
+    .luxury-title { font-family: 'Cormorant Garamond', serif; }
+    .hero-slide { opacity: 0; transition: opacity 1.4s ease; }
+    .hero-slide.active { opacity: 1; }
+    .hero-slide::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(20,14,8,.78), rgba(30,20,10,.44), rgba(20,14,8,.62)); }
+    .img-slot.has-image img { display: block; }
+    .img-slot.has-image .slot-text { display: none; }
+    .reveal { opacity: 0; transform: translateY(28px); }
+    .cursor-dot, .cursor-ring { pointer-events: none; }
+    @media (max-width: 768px) { .cursor-dot, .cursor-ring { display:none; } }
+
+
+    /* UPDATE: All content text changed to bold black */
+    body, body * {
+      color: #000000 !important;
+      font-weight: 700 !important;
+    }
+    input::placeholder,
+    textarea::placeholder,
+    select,
+    option {
+      color: #000000 !important;
+      font-weight: 700 !important;
+      opacity: 1 !important;
+    }
+    button,
+    a,
+    label,
+    p,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    li,
+    div {
+      font-weight: 700 !important;
+    }
+    .hero-slide::after {
+      background: linear-gradient(135deg, rgba(255,255,255,.78), rgba(255,255,255,.55), rgba(255,255,255,.72));
+    }
+    .hero-anim,
+    .hero-anim *,
+    .slot-text,
+    .slot-text *,
+    .ticker,
+    .ticker *,
+    footer,
+    footer * {
+      color: #000000 !important;
+      font-weight: 700 !important;
+    }
+    .bg-gold,
+    .form-btn,
+    .contact-btn:hover {
+      color: #000000 !important;
+    }
+
+    /* Amenities dark section — override global black text */
+    #amenities,
+    #amenities h2,
+    #amenities header span,
+    #amenities .amenities-lead {
+      color: #ffffff !important;
+    }
+    #amenities em.text-gold {
+      color: #c29c60 !important;
+    }
+    #amenities .amenities-lead {
+      color: rgba(255, 255, 255, 0.72) !important;
+    }
+    #amenities .amenities-card-label {
+      color: #ffffff !important;
+    }
+  </style>
+</head>
+
+<body class="bg-white text-black font-sanslux font-bold overflow-x-hidden selection:bg-gold selection:text-black">
+  <div id="scrollProgress" class="fixed left-0 top-0 z-[9999] h-[3px] w-0 bg-gold"></div>
+  <div id="cursor" class="cursor-dot fixed left-0 top-0 z-[9998] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold mix-blend-multiply"></div>
+  <div id="cursorRing" class="cursor-ring fixed left-0 top-0 z-[9997] h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/50"></div>
+
+  <!-- NAV -->
+  <nav id="mainNav" class="fixed left-0 top-0 z-[200] w-full px-5 py-5 transition-all duration-500 md:px-14 md:py-7">
+    <div class="relative mx-auto flex max-w-[1440px] items-center justify-center">
+      <a href="#hero" class="absolute left-0 top-1/2 flex -translate-y-1/2 items-center">
+        <img src="images/logo.png" alt="Codename Hennur Logo" class="h-12 w-auto object-contain md:h-16" />
+      </a>
+      <div class="hidden items-center justify-center gap-9 md:flex">
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#city">City</a>
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#corridor">Corridor</a>
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#location">Location</a>
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#residence">Residence</a>
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#amenities">Amenities</a>
+        <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#contact">Contact</a>
+      </div>
+      <a href="#contact" class="absolute right-0 top-1/2 -translate-y-1/2 border border-gold px-4 py-2 text-[10px] font-bold uppercase tracking-[.22em] text-black transition hover:bg-gold hover:text-white md:px-6 md:py-3">
+        Express Interest
+      </a>
+    </div>
+  </nav>
+
+<!-- HERO -->
+<section id="hero" class="relative flex min-h-screen items-center overflow-hidden">
+
+  <!-- HERO IMAGES -->
+  <div class="absolute inset-0">
+    <div class="hero-slide active absolute inset-0">
+      <img 
+        src="images/bannar1.png" 
+        alt="Codename Hennur Hero Image 1" 
+        class="h-full w-full object-cover object-center"
+      >
+      <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <div class="hero-slide absolute inset-0">
+      <img 
+        src="images/bannar2.png" 
+        alt="Codename Hennur Hero Image 2" 
+        class="h-full w-full object-cover object-center"
+      >
+      <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+
+    <div class="hero-slide absolute inset-0">
+      <img 
+        src="images/bannar3.png" 
+        alt="Codename Hennur Hero Image 3" 
+        class="h-full w-full object-cover object-center"
+      >
+      <div class="absolute inset-0 bg-black/60"></div>
+    </div>
+  </div>
+
+  <!-- HERO CONTENT -->
+  <div class="relative z-20 mx-auto grid w-full max-w-[1440px] gap-12 px-5 py-28 text-center md:grid-cols-[1.15fr_.85fr] md:items-center md:px-14 md:py-32 md:text-left">
+    
+    <!-- LEFT CONTENT -->
+    <div class="mx-auto max-w-3xl text-white md:mx-0">
+      <p class="hero-anim mb-6 text-xs font-bold uppercase tracking-[.38em] text-gold">
+        Confidential · North Bengaluru
+      </p>
+
+      <h1 class="hero-anim luxury-title text-4xl font-bold leading-tight text-white sm:text-5xl md:text-7xl">
+        The Art Of
+        <span class="block text-gold">
+          Private Living
+        </span>
+      </h1>
+
+      <p class="hero-anim mt-6 text-xs font-bold uppercase tracking-[.28em] text-white/90">
+        Coming Soon to Hennur Main Road
+      </p>
+
+      <p class="hero-anim luxury-title mx-auto mt-8 max-w-2xl text-lg font-bold leading-relaxed text-white/90 md:mx-0 md:text-2xl">
+        A single tower of two private wings, rising from a high podium above its surroundings.
+        ~200 residences. One uncompromising standard.
+      </p>
+
+      <div class="hero-anim mt-10 flex flex-wrap justify-center gap-3 md:justify-start">
+        <a href="#contact" class="bg-gold px-7 py-4 text-xs font-bold uppercase tracking-[.25em] text-white transition hover:bg-goldLight">
+          Request Private Briefing
+        </a>
+
+        <a href="#residence" class="border border-white/70 px-7 py-4 text-xs font-bold uppercase tracking-[.25em] text-white transition hover:border-gold hover:text-gold">
+          View Residences
+        </a>
+      </div>
+    </div>
+
+    <!-- RIGHT FORM - NO WHITE BACKGROUND -->
+    <form class="hero-anim mx-auto w-full max-w-md border border-gold/35 bg-black/35 p-7 text-left shadow-2xl backdrop-blur-md md:mx-0 md:ml-auto md:p-9">
+      <h3 class="luxury-title text-xl font-bold text-white md:text-2xl">
+        Express Interest
+      </h3>
+
+      <p class="mt-2 text-[11px] font-bold uppercase tracking-[.18em] text-gold">
+        Exclusive Preview Access
+      </p>
+
+      <div class="mt-7 space-y-5">
+        <input 
+          class="w-full border-b border-white/25 bg-transparent py-3 text-sm font-bold text-white outline-none placeholder:text-white/70 focus:border-gold" 
+          placeholder="Full Name" 
+        />
+
+        <input 
+          class="w-full border-b border-white/25 bg-transparent py-3 text-sm font-bold text-white outline-none placeholder:text-white/70 focus:border-gold" 
+          placeholder="Mobile Number" 
+        />
+
+        <input 
+          class="w-full border-b border-white/25 bg-transparent py-3 text-sm font-bold text-white outline-none placeholder:text-white/70 focus:border-gold" 
+          placeholder="Email Address" 
+        />
+
+        <select class="w-full border-b border-white/25 bg-transparent py-3 text-sm font-bold text-white outline-none focus:border-gold">
+          <option class="text-black">Residence Configuration</option>
+          <option class="text-black">3 BHK · ~2,000 sq.ft</option>
+          <option class="text-black">3 BHK + Staff · ~2,400 sq.ft</option>
+          <option class="text-black">4 BHK + Staff · ~2,700 sq.ft</option>
+        </select>
+      </div>
+
+      <button type="button" class="mt-8 w-full bg-gold py-4 text-xs font-bold uppercase tracking-[.25em] text-white transition hover:bg-goldLight">
+        Request Private Briefing
+      </button>
+
+      <p class="mt-4 text-center text-[11px] font-bold text-white/70">
+        This document is confidential. Your details are secure.
+      </p>
+    </form>
+
+  </div>
+
+  <!-- SLIDER DOTS -->
+  <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+    <button class="dot h-0.5 w-12 bg-gold" data-index="0"></button>
+    <button class="dot h-0.5 w-6 bg-gold/40" data-index="1"></button>
+    <button class="dot h-0.5 w-6 bg-gold/40" data-index="2"></button>
+  </div>
+
+</section>
+  <!-- TICKER -->
+  <div class="overflow-hidden bg-gold py-3 whitespace-nowrap">
+    <div class="inline-flex animate-ticker text-[10px] font-medium uppercase tracking-[.25em] text-white">
+      <span class="mx-8">Codename Hennur</span><span>◈</span><span class="mx-8">The Art of Private Living</span><span>◈</span><span class="mx-8">Hennur Main Road · North Bengaluru</span><span>◈</span><span class="mx-8">~200 Residences · 1 Tower · 2 Wings</span><span>◈</span><span class="mx-8">79.1% 5-Year Appreciation</span><span>◈</span><span class="mx-8">10 ft Ceilings · VRV Installed · Indoor Pool</span><span>◈</span>
+      <span class="mx-8">Codename Hennur</span><span>◈</span><span class="mx-8">The Art of Private Living</span><span>◈</span><span class="mx-8">Hennur Main Road · North Bengaluru</span><span>◈</span><span class="mx-8">~200 Residences · 1 Tower · 2 Wings</span><span>◈</span><span class="mx-8">79.1% 5-Year Appreciation</span><span>◈</span><span class="mx-8">10 ft Ceilings · VRV Installed · Indoor Pool</span><span>◈</span>
+    </div>
+  </div>
+
+  <!-- CITY -->
+<section id="city" class="bg-soft px-5 py-24 md:px-14 md:py-32">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- CENTER HEADING -->
+    <header class="mx-auto mb-16 max-w-4xl text-center">
+      <span class="reveal mb-4 block text-[10px] uppercase tracking-[.32em] text-gold">
+        01 — The City
+      </span>
+
+      <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
+        Bengaluru Where growth meets lifestyle.
+        
+      </h2>
+
+      <div class="reveal mx-auto my-7 h-px w-16 bg-gold"></div>
+
+      <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">
+        Bengaluru continues to be one of India’s most preferred residential destinations.
+        With strong employment opportunities, fast-growing infrastructure, premium social
+        conveniences, and excellent connectivity, the city offers a future-ready lifestyle
+        for both homebuyers and investors.
+      </p>
+    </header>
+
+    <!-- CONTENT GRID -->
+    <div class="grid gap-12 md:grid-cols-[1.05fr_.95fr] md:items-center">
+
+     <!-- LEFT IMAGE AREA -->
+<div class="reveal">
+  <div class="relative h-[380px] overflow-hidden border border-gold/20 bg-white shadow-sm md:h-[560px]">
+    <img 
+      src="images/aboutimg.jpg" 
+      alt="Premium residential development in Bengaluru"
+      class="h-full w-full object-cover object-center"
+    />
+  </div>
+</div>
+
+      <!-- RIGHT CONTENT AREA -->
+      <div>
+
+        <!-- POINTS -->
+        <div class="reveal space-y-0 divide-y divide-gold/10">
+          <p class="py-4 text-sm leading-7 text-muted">
+            <strong class="font-medium text-ink">India’s leading IT and startup hub</strong>
+            — supporting steady housing demand.
+          </p>
+
+          <p class="py-4 text-sm leading-7 text-muted">
+            <strong class="font-medium text-ink">Expanding infrastructure and connectivity</strong>
+            — improving daily convenience.
+          </p>
+
+          <p class="py-4 text-sm leading-7 text-muted">
+            <strong class="font-medium text-ink">Premium residential growth</strong>
+            — driven by professionals, families, and investors.
+          </p>
+
+          <p class="py-4 text-sm leading-7 text-muted">
+            <strong class="font-medium text-ink">Strong appreciation potential</strong>
+            — making Bengaluru a preferred investment destination.
+          </p>
+        </div>
+
+        <!-- STATS -->
+        <div class="mt-9 grid grid-cols-2 gap-3">
+          <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
+            <div class="luxury-title text-3xl text-gold md:text-4xl">2nd</div>
+            <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
+              City Momentum
+            </p>
+          </div>
+
+          <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
+            <div class="luxury-title text-3xl text-gold md:text-4xl">1st</div>
+            <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
+              Ease of Living
+            </p>
+          </div>
+
+          <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
+            <div class="luxury-title text-3xl text-gold md:text-4xl">High</div>
+            <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
+              Home Demand
+            </p>
+          </div>
+
+          <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
+            <div class="luxury-title text-3xl text-gold md:text-4xl">Strong</div>
+            <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
+              Future Growth
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+  <!-- CORRIDOR -->
+<!-- CORRIDOR -->
+<section id="corridor" class="bg-white px-5 py-24 md:px-14 md:py-32">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- CENTER HEADING -->
+    <header class="mx-auto mb-16 max-w-4xl text-center">
+      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
+        02 — The Corridor
+      </span>
+
+      <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
+        North <span class="text-gold">Bengaluru</span>
+      </h2>
+
+      <div class="reveal mx-auto my-7 h-px w-16 bg-gold"></div>
+
+      <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">
+        The city’s fastest-growing residential corridor — shaped by infrastructure expansion,
+        employment hubs, airport connectivity, and rising demand for premium homes.
+      </p>
+    </header>
+
+    <!-- CORRIDOR INTRO WITHOUT IMAGE -->
+    <div class="reveal mx-auto max-w-5xl border border-gold/15 bg-soft p-8 text-center shadow-sm md:p-12">
+      <h3 class="luxury-title text-2xl font-light leading-tight text-ink md:text-4xl">
+        A growth corridor built for
+        <span class="block text-gold">homebuyers and investors.</span>
+      </h3>
+
+      <p class="mx-auto mt-6 max-w-3xl text-[15px] leading-8 text-muted">
+        Hennur, Thanisandra, Hebbal, Jakkur, Kothanur, Bagalur, and surrounding zones
+        are witnessing strong residential traction due to better connectivity, upcoming
+        infrastructure, and proximity to major employment destinations.
+      </p>
+    </div>
+
+    <!-- MAIN STATS -->
+    <div class="mt-10 grid gap-4 md:grid-cols-2">
+      <div class="reveal border border-gold/15 bg-white p-8 text-center shadow-sm md:p-10">
+        <div class="luxury-title text-5xl text-gold md:text-6xl">79.1%</div>
+        <p class="mt-4 text-xs uppercase tracking-[.18em] text-muted">
+          5-Year Price Appreciation
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-8 text-center shadow-sm md:p-10">
+        <div class="luxury-title text-5xl text-gold md:text-6xl">30–40%</div>
+        <p class="mt-4 text-xs uppercase tracking-[.18em] text-muted">
+          Projected Growth
+        </p>
+      </div>
+    </div>
+
+    <!-- SMALL STATS -->
+    <div class="mt-4 grid gap-4 md:grid-cols-3">
+      <div class="reveal border border-gold/15 bg-soft p-7 text-center shadow-sm">
+        <div class="luxury-title text-3xl text-gold md:text-4xl">~12%</div>
+        <p class="mt-3 text-[10px] uppercase tracking-[.16em] text-muted">
+          YoY Price Rise
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-soft p-7 text-center shadow-sm">
+        <div class="luxury-title text-3xl text-gold md:text-4xl">4th</div>
+        <p class="mt-3 text-[10px] uppercase tracking-[.16em] text-muted">
+          Global Price Growth
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-soft p-7 text-center shadow-sm">
+        <div class="luxury-title text-3xl text-gold md:text-4xl">4.86%</div>
+        <p class="mt-3 text-[10px] uppercase tracking-[.16em] text-muted">
+          Average Rental Yield
+        </p>
+      </div>
+    </div>
+
+    <!-- LOCATION STRIP -->
+    <div class="reveal mt-16 border-y border-gold/15 py-8 text-center">
+      <p class="text-sm uppercase leading-7 tracking-[.22em] text-muted">
+        Hennur · Thanisandra · Hebbal · Jakkur · Kothanur · Bagalur · Kalyan Nagar · HBR Layout
+      </p>
+    </div>
+
+    <!-- INFRASTRUCTURE PIPELINE -->
+    <div class="mt-20 text-center">
+      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
+        Connectivity Advantage
+      </span>
+
+      <h3 class="reveal luxury-title text-2xl font-light text-ink md:text-4xl">
+        Infrastructure <span class="text-gold">Pipeline</span>
+      </h3>
+
+      <p class="reveal mx-auto mt-5 max-w-2xl text-[15px] leading-8 text-muted">
+        Major road, metro, rail, and airport connectivity developments are strengthening
+        North Bengaluru’s long-term residential value.
+      </p>
+    </div>
+
+    <!-- INFRA CARDS -->
+    <div class="mt-10 grid gap-4 md:grid-cols-3">
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Bengaluru Business Corridor
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          PRR Orbital Route
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          A planned orbital route designed to improve cross-city access and strengthen
+          connectivity across key growth zones.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          74 km orbital route
+        </p>
+      </article>
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Elevated Corridor
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          Nagavara–Bagalur Access
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          Proposed elevated connectivity improving movement through the North Bengaluru
+          residential and airport corridor.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          17.9 km corridor
+        </p>
+      </article>
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Namma Metro
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          Airport Metro Line
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          Metro connectivity towards the airport corridor is expected to improve access
+          between key business and residential hubs.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          58.19 km · 32 stations
+        </p>
+      </article>
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Suburban Rail
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          BSRP Network
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          A city-wide suburban rail network planned to create stronger multi-modal
+          connectivity across Bengaluru.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          148 km network
+        </p>
+      </article>
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Metro Expansion
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          Pink & Yellow Lines
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          Upcoming metro expansion is expected to improve access to important employment
+          and lifestyle zones.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          Expanding city access
+        </p>
+      </article>
+
+      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+          Direct Connectivity
+        </p>
+        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+          ORR & Airport Access
+        </h4>
+        <p class="mt-4 text-sm leading-7 text-muted">
+          Strong access to Manyata Tech Park, ORR, airport road, and major business
+          corridors increases residential demand.
+        </p>
+        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+          Work-life convenience
+        </p>
+      </article>
+
+    </div>
+
+  </div>
+</section>
+
+  <!-- LOCATION -->
+<!-- LOCATION -->
+<section id="location" class="bg-soft px-5 py-24 md:px-14 md:py-32">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- CENTER HEADING -->
+    <header class="mx-auto mb-14 max-w-4xl text-center">
+      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
+        03 — The Location
+      </span>
+
+      <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
+        Hennur Main Road
+        <span class="mt-2 block text-gold">
+          Connected. Composed. Considered.
+        </span>
+      </h2>
+
+      <div class="reveal mx-auto my-7 h-px w-16 bg-gold"></div>
+
+      <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">
+        Positioned on Hennur Main Road, the address offers excellent connectivity to
+        Outer Ring Road, business hubs, healthcare, schools, malls, and the airport corridor —
+        while retaining a calm residential character.
+      </p>
+    </header>
+
+    <!-- MAP + LOCATION HIGHLIGHT -->
+    <div class="grid gap-10 md:grid-cols-[1.15fr_.85fr] md:items-stretch">
+
+      <!-- GOOGLE MAP -->
+      <div class="reveal overflow-hidden border border-gold/20 bg-white shadow-sm">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7774.099748245702!2d77.637166!3d13.032496!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae17aa441c014d%3A0xa5dd1d274665c1ea!2sCodename%20Hennur!5e0!3m2!1sen!2sin!4v1778586486840!5m2!1sen!2sin"
+          class="h-[360px] w-full md:h-[520px]"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+      </div>
+
+      <!-- LOCATION SUMMARY CARD -->
+      <div class="reveal border border-gold/20 bg-white p-8 shadow-sm md:p-10">
+        <p class="mb-4 text-[10px] uppercase tracking-[.28em] text-gold">
+          Address Advantage
+        </p>
+
+        <h3 class="luxury-title text-2xl font-light leading-tight text-ink md:text-4xl">
+          A well-connected
+          <span class="block text-gold">North Bengaluru address.</span>
+        </h3>
+
+        <p class="mt-5 text-[15px] leading-8 text-muted">
+          Hennur Main Road is one of North Bengaluru’s established residential belts,
+          offering easy access to commercial zones, lifestyle destinations, reputed schools,
+          healthcare, and the airport side of the city.
+        </p>
+
+        <div class="mt-8 space-y-4">
+          <div class="border-l border-gold/40 pl-5">
+            <p class="text-sm font-medium text-ink">Fast access to ORR</p>
+            <p class="mt-1 text-sm leading-6 text-muted">
+              Smooth connectivity towards Manyata Tech Park, Hebbal, KR Puram, and Whitefield corridors.
+            </p>
+          </div>
+
+          <div class="border-l border-gold/40 pl-5">
+            <p class="text-sm font-medium text-ink">Residential comfort</p>
+            <p class="mt-1 text-sm leading-6 text-muted">
+              Surrounded by schools, hospitals, retail spaces, lakes, and family-friendly neighbourhoods.
+            </p>
+          </div>
+
+          <div class="border-l border-gold/40 pl-5">
+            <p class="text-sm font-medium text-ink">Future growth corridor</p>
+            <p class="mt-1 text-sm leading-6 text-muted">
+              Supported by metro expansion, airport connectivity, and North Bengaluru infrastructure growth.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CONNECTIVITY DETAILS -->
+    <div class="mt-16 grid gap-6 md:grid-cols-3">
+
+      <!-- CITY CONNECTIVITY -->
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm">
+        <h4 class="mb-5 text-xs uppercase tracking-[.28em] text-gold">
+          City Connectivity
+        </h4>
+
+        <div class="divide-y divide-gold/15 text-sm text-muted">
+          <p class="flex justify-between gap-4 py-3">
+            <span>Outer Ring Road</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">~3–4 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>MG Road / CBD</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">8.7 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Lavelle Road / UB City</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">10.4 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Indiranagar</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">12 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Airport</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">24.8 km</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- HEALTHCARE -->
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm">
+        <h4 class="mb-5 text-xs uppercase tracking-[.28em] text-gold">
+          Healthcare
+        </h4>
+
+        <div class="divide-y divide-gold/15 text-sm text-muted">
+          <p class="flex justify-between gap-4 py-3">
+            <span>Sparsh Hospital</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">1.5 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Motherhood Hospital</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">2.9 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Cloudnine Hospital</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">3.2 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Aster CMI Hospital</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">7.8 km</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- EDUCATION & LIFESTYLE -->
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm">
+        <h4 class="mb-5 text-xs uppercase tracking-[.28em] text-gold">
+          Education & Lifestyle
+        </h4>
+
+        <div class="divide-y divide-gold/15 text-sm text-muted">
+          <p class="flex justify-between gap-4 py-3">
+            <span>Legacy School</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">4.4 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Bhartiya Mall</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">7.4 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Mall of Asia</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">9.5 km</span>
+          </p>
+
+          <p class="flex justify-between gap-4 py-3">
+            <span>Vidyashilp Academy</span>
+            <span class="luxury-title shrink-0 text-lg text-gold">11.6 km</span>
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MARKET PERFORMANCE -->
+    <div class="reveal mt-16 border border-gold/20 bg-white p-8 shadow-sm md:p-10">
+      <div class="mb-8 text-center">
+        <p class="mb-3 text-[10px] uppercase tracking-[.28em] text-gold">
+          Market Performance
+        </p>
+
+        <h3 class="luxury-title text-2xl font-light text-ink md:text-4xl">
+          Strong residential value
+          <span class="text-gold">with future upside.</span>
+        </h3>
+      </div>
+
+      <div class="grid gap-3 md:grid-cols-4">
+        <div class="border border-gold/10 bg-soft p-6 text-center">
+          <div class="luxury-title text-3xl text-gold md:text-4xl">79.1%</div>
+          <p class="mt-2 text-xs uppercase tracking-[.14em] text-muted">
+            5-Year Appreciation
+          </p>
+        </div>
+
+        <div class="border border-gold/10 bg-soft p-6 text-center">
+          <div class="luxury-title text-3xl text-gold md:text-4xl">3.49–5.2%</div>
+          <p class="mt-2 text-xs uppercase tracking-[.14em] text-muted">
+            Rental Yield
+          </p>
+        </div>
+
+        <div class="border border-gold/10 bg-soft p-6 text-center">
+          <div class="luxury-title text-3xl text-gold md:text-4xl">30–40%</div>
+          <p class="mt-2 text-xs uppercase tracking-[.14em] text-muted">
+            Projected Growth
+          </p>
+        </div>
+
+        <div class="border border-gold/10 bg-soft p-6 text-center">
+          <div class="luxury-title text-3xl text-gold md:text-4xl">₹9,300+</div>
+          <p class="mt-2 text-xs uppercase tracking-[.14em] text-muted">
+            Avg. Price / Sq.ft
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!-- RESIDENCE -->
+<section id="residence" class="bg-white px-5 py-24 md:px-14 md:py-32">
+  <div class="mx-auto max-w-7xl">
+
+    <!-- CENTER HEADING -->
+    <header class="mx-auto mb-14 max-w-4xl text-center">
+      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
+        04 — The Residence
+      </span>
+
+      <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
+        The Residence Elevated.
+        
+      </h2>
+
+      <div class="reveal mx-auto my-7 h-px w-16 bg-gold"></div>
+
+      <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">
+        A refined residential tower planned for privacy, comfort, and spacious living.
+        With thoughtfully designed homes, premium proportions, and limited residences,
+        every detail is shaped around an elevated lifestyle.
+      </p>
+    </header>
+
+    <!-- CONFIGURATION CARDS -->
+    <div class="mt-14 grid gap-4 md:grid-cols-3">
+      <div class="reveal border border-gold/15 bg-white p-8 text-center shadow-sm">
+        <p class="text-xs uppercase tracking-[.25em] text-muted">3 BHK</p>
+        <div class="luxury-title mt-4 text-4xl text-ink md:text-5xl">~2,000</div>
+        <p class="mt-1 text-xs uppercase tracking-[.16em] text-gold">sq.ft</p>
+      </div>
+
+      <div class="reveal relative border border-gold/70 bg-gold/5 p-8 text-center shadow-sm">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gold px-4 py-1 text-[10px] uppercase tracking-[.2em] text-white">
+          Most Popular
+        </span>
+        <p class="text-xs uppercase tracking-[.25em] text-muted">3 BHK + Staff</p>
+        <div class="luxury-title mt-4 text-4xl text-ink md:text-5xl">~2,400</div>
+        <p class="mt-1 text-xs uppercase tracking-[.16em] text-gold">sq.ft</p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-8 text-center shadow-sm">
+        <p class="text-xs uppercase tracking-[.25em] text-muted">4 BHK + Staff</p>
+        <div class="luxury-title mt-4 text-4xl text-ink md:text-5xl">~2,700</div>
+        <p class="mt-1 text-xs uppercase tracking-[.16em] text-gold">sq.ft</p>
+      </div>
+    </div>
+
+    <!-- MASTER PLAN + UNIT PLAN BLURRED IMAGES -->
+    <div class="mt-16 grid gap-6 md:grid-cols-2">
+
+      <!-- MASTER PLAN -->
+      <div class="reveal overflow-hidden border border-gold/20 bg-soft shadow-sm">
+        <div class="relative h-[360px] md:h-[480px]">
+          <img
+            src="images/MasterPlan.jpg"
+            alt="Master plan"
+            class="h-full w-full object-cover object-center blur-[4px] scale-105"
+          />
+
+          <div class="absolute inset-0 bg-black/35"></div>
+
+          <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+            <p class="text-[10px] uppercase tracking-[.3em] text-gold">
+              Master Plan
+            </p>
+
+            <h3 class="luxury-title mt-4 text-3xl font-light text-white md:text-4xl">
+              Site Planning Preview
+            </h3>
+
+            <p class="mt-4 max-w-sm text-sm leading-7 text-white/80">
+              A thoughtfully composed layout designed for privacy, movement,
+              open spaces, and elevated community living.
+            </p>
+
+            <button class="mt-7 border border-gold bg-gold px-6 py-3 text-xs uppercase tracking-[.22em] text-white transition hover:bg-transparent hover:text-gold">
+              Enquire to View
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- UNIT PLAN -->
+      <div class="reveal overflow-hidden border border-gold/20 bg-soft shadow-sm">
+        <div class="relative h-[360px] md:h-[480px]">
+          <img
+            src="images/floorplan.jpg"
+            alt="Unit plan"
+            class="h-full w-full object-cover object-center blur-[4px] scale-105"
+          />
+
+          <div class="absolute inset-0 bg-black/35"></div>
+
+          <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+            <p class="text-[10px] uppercase tracking-[.3em] text-gold">
+              Unit Plan
+            </p>
+
+            <h3 class="luxury-title mt-4 text-3xl font-light text-white md:text-4xl">
+              Spacious Home Layouts
+            </h3>
+
+            <p class="mt-4 max-w-sm text-sm leading-7 text-white/80">
+              Homes planned with generous room sizes, functional movement,
+              natural ventilation, and premium everyday comfort.
+            </p>
+
+            <button class="mt-7 border border-gold bg-gold px-6 py-3 text-xs uppercase tracking-[.22em] text-white transition hover:bg-transparent hover:text-gold">
+              Request Floor Plan
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ARCHITECTURE CONTENT -->
+    <div class="mx-auto mt-20 max-w-4xl text-center">
+      <h3 class="reveal luxury-title text-2xl font-light text-ink md:text-4xl">
+        Architecture as a
+        <span class="text-gold">statement of privacy.</span>
+      </h3>
+
+      <p class="reveal mx-auto mt-5 max-w-2xl text-[15px] leading-8 text-muted">
+        Every element is planned to make the residence feel private, calm, and exclusive —
+        from limited homes per floor to thoughtful circulation and generous spatial proportions.
+      </p>
+    </div>
+
+    <!-- FEATURE CARDS -->
+    <div class="mt-12 grid gap-4 md:grid-cols-3">
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">Two Private Wings</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          A single tower designed as two independent wings for better privacy and exclusivity.
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">Near-Private Lift</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          Limited residences served by dedicated lift access for a more private arrival experience.
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">Only 4 Per Floor</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          Low-density planning creates quieter corridors and a more exclusive residential setting.
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">10 Ft Ceilings</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          Generous vertical proportions create a sense of openness, comfort, and luxury.
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">Dual Balconies</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          Designed for natural light, airflow, and flexible outdoor living moments.
+        </p>
+      </div>
+
+      <div class="reveal border border-gold/15 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
+        <div class="mb-5 h-2 w-2 rotate-45 bg-gold"></div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">Staggered Privacy</h4>
+        <p class="mt-3 text-sm leading-7 text-muted">
+          Smart balcony positioning helps maintain visual privacy between residences.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+  <!-- SMART HOME / AMENITIES -->
+  <!-- <section id="smart" class="bg-soft px-5 py-24 md:px-14 md:py-32">
+    <div class="mx-auto max-w-7xl">
+      <header class="mx-auto mb-14 max-w-4xl text-center">
+        <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">05 — Smart Living</span>
+        <h2 class="reveal luxury-title text-3xl font-light leading-tight md:text-4xl">Comfort <em class="text-gold">Already built in.</em></h2>
+        <div class="reveal mx-auto my-7 h-px w-14 bg-gold"></div>
+      </header>
+      <div class="grid gap-14 md:grid-cols-[.9fr_1.1fr] md:items-start">
+      <div class="img-slot reveal relative flex h-[500px] items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-white"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">Upload Smart Home / Amenity Visual</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
+      <div>
+        <div class="mt-0 space-y-1 md:mt-0">
+          <div class="reveal border-l-2 border-gold/30 bg-white p-6 hover:border-gold"><h4 class="text-xs uppercase tracking-[.18em] text-gold">VRV Air-Conditioning</h4><p class="mt-2 text-sm leading-7 text-muted">Fully installed VRV system with zoned temperature control and efficient cooling.</p></div>
+          <div class="reveal border-l-2 border-gold/30 bg-white p-6 hover:border-gold"><h4 class="text-xs uppercase tracking-[.18em] text-gold">Indoor Temperature-Controlled Pool</h4><p class="mt-2 text-sm leading-7 text-muted">A refined wellness experience designed for all-season use.</p></div>
+          <div class="reveal border-l-2 border-gold/30 bg-white p-6 hover:border-gold"><h4 class="text-xs uppercase tracking-[.18em] text-gold">High Podium Amenities</h4><p class="mt-2 text-sm leading-7 text-muted">Elevated leisure spaces that stay separated from street-level movement.</p></div>
+          <div class="reveal border-l-2 border-gold/30 bg-white p-6 hover:border-gold"><h4 class="text-xs uppercase tracking-[.18em] text-gold">Premium Specifications</h4><p class="mt-2 text-sm leading-7 text-muted">Smart access, elegant finishes, intelligent layouting, and privacy-first planning.</p></div>
+        </div>
+      </div>
+    </div>
+    </div>
+  </section> -->
+
+  <!-- FLOOR PLANS -->
+  <!-- <section id="floorplans" class="bg-white px-5 py-24 md:px-14 md:py-32">
+    <div class="mx-auto max-w-7xl">
+      <header class="mx-auto mb-12 max-w-4xl text-center">
+        <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">06 — Floor Plans</span>
+        <h2 class="reveal luxury-title text-3xl font-light leading-tight md:text-4xl">Choose your <em class="text-gold">private scale.</em></h2>
+        <div class="reveal mx-auto mt-7 h-px w-14 bg-gold"></div>
+      </header>
+      <div class="mt-12 grid gap-1 md:grid-cols-3">
+        <div class="img-slot reveal relative flex h-80 items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-soft"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">3 BHK Floor Plan</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
+        <div class="img-slot reveal relative flex h-80 items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-soft"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">3 BHK + Staff Plan</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
+        <div class="img-slot reveal relative flex h-80 items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-soft"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">4 BHK + Staff Plan</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- AMENITIES -->
+  <section id="amenities" class="bg-[#0c0c0c] px-5 py-24 text-white md:px-14 md:py-32">
+    <div class="mx-auto max-w-7xl">
+      <header class="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+        <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">07 — Amenities</span>
+        <h2 class="reveal luxury-title text-3xl font-light leading-tight text-white md:text-4xl">Life beyond your <em class="text-gold">front door.</em></h2>
+        <div class="reveal mx-auto mt-7 h-px w-14 bg-gold"></div>
+        <p class="reveal amenities-lead mx-auto mt-6 max-w-2xl text-sm leading-relaxed">Podium-level experiences designed for every generation — from quiet corners to shared celebration.</p>
+      </header>
+
+      <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-2 lg:grid-cols-3 lg:gap-3">
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/Amphitheatre.png" alt="Outdoor amphitheatre with tiered stone seating" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1588806651154-3c0469ae7fe7?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Amphitheatre</span>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/kids.png" alt="Children's indoor play area" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1587652978608-38abbe792a8c?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Kids Play Area</span>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/Maze-Garden.png" alt="Landscaped maze garden" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Maze Garden</span>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/Business-Lounge.png" alt="Business lounge with seating and daylight" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Business Lounge</span>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/library.png" alt="Library with bookshelves and reading tables" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1521587760476-fbc48e003afb?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Library</span>
+            </div>
+          </div>
+        </article>
+        <article class="reveal group relative aspect-[4/3] min-h-[200px] overflow-hidden bg-zinc-900 sm:min-h-[220px] lg:min-h-[240px]">
+          <img src="images/Meditation-Yoga-Deck.png" alt="Outdoor meditation and yoga deck" class="absolute inset-0 h-full w-full object-cover transition duration-700 ease-out group-hover:scale-105" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=1000&q=80'" />
+          <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 flex w-full max-w-[calc(100%-1rem)]">
+            <div class="w-1 shrink-0 bg-gold" aria-hidden="true"></div>
+            <div class="flex min-h-[3rem] flex-1 items-center bg-black/65 px-4 py-2.5 backdrop-blur-sm md:min-h-[3.25rem] md:px-5 md:py-3">
+              <span class="amenities-card-label text-[10px] font-bold uppercase tracking-[.22em] md:text-[11px]">Meditation &amp; Yoga Deck</span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- NUMBERS -->
+  <section id="numbers" class="grid bg-gold px-5 py-16 md:grid-cols-4 md:px-14">
+    <div class="reveal border-white/25 p-8 text-center md:border-r"><div class="luxury-title text-4xl text-ink md:text-5xl">~200</div><p class="mt-2 text-xs uppercase tracking-[.22em] text-ink/60">Residences</p></div>
+    <div class="reveal border-white/25 p-8 text-center md:border-r"><div class="luxury-title text-4xl text-ink md:text-5xl">1</div><p class="mt-2 text-xs uppercase tracking-[.22em] text-ink/60">Tower</p></div>
+    <div class="reveal border-white/25 p-8 text-center md:border-r"><div class="luxury-title text-4xl text-ink md:text-5xl">2</div><p class="mt-2 text-xs uppercase tracking-[.22em] text-ink/60">Private Wings</p></div>
+    <div class="reveal p-8 text-center"><div class="luxury-title text-4xl text-ink md:text-5xl">4</div><p class="mt-2 text-xs uppercase tracking-[.22em] text-ink/60">Homes Per Floor</p></div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section id="summary" class="bg-white px-5 py-24 text-center md:px-14 md:py-32">
+    <div class="mx-auto max-w-5xl">
+      <p class="reveal luxury-title text-2xl font-light leading-snug md:text-4xl">A residence for those who want the city close, <em class="text-gold">but not inside their home.</em></p>
+      <div class="mt-16 grid gap-1 md:grid-cols-4">
+        <div class="reveal border border-gold/10 bg-soft p-8"><div class="luxury-title text-3xl text-gold md:text-4xl">01</div><h4 class="mt-3 text-xs uppercase tracking-[.22em]">Growth</h4><p class="mt-3 text-sm leading-7 text-muted">North Bengaluru's infrastructure-led appreciation story.</p></div>
+        <div class="reveal border border-gold/10 bg-soft p-8"><div class="luxury-title text-3xl text-gold md:text-4xl">02</div><h4 class="mt-3 text-xs uppercase tracking-[.22em]">Privacy</h4><p class="mt-3 text-sm leading-7 text-muted">Two wings, limited homes, and low-density planning.</p></div>
+        <div class="reveal border border-gold/10 bg-soft p-8"><div class="luxury-title text-3xl text-gold md:text-4xl">03</div><h4 class="mt-3 text-xs uppercase tracking-[.22em]">Scale</h4><p class="mt-3 text-sm leading-7 text-muted">Large homes with 10 ft ceilings and dual balconies.</p></div>
+        <div class="reveal border border-gold/10 bg-soft p-8"><div class="luxury-title text-3xl text-gold md:text-4xl">04</div><h4 class="mt-3 text-xs uppercase tracking-[.22em]">Access</h4><p class="mt-3 text-sm leading-7 text-muted">Hennur Main Road with strong city and airport reach.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="bg-soft px-5 py-24 md:px-14 md:py-32">
+    <div class="mx-auto max-w-4xl">
+      <span class="reveal mb-3 block text-center text-[10px] uppercase tracking-[.32em] text-gold">FAQ</span>
+      <h2 class="reveal luxury-title text-center text-3xl font-light md:text-4xl">Frequently Asked <em class="text-gold">Questions</em></h2>
+      <div class="mt-12 space-y-3">
+        <details class="reveal group border border-gold/15 bg-white p-6"><summary class="cursor-pointer list-none text-sm uppercase tracking-[.16em] text-ink">Where is Codename Hennur located?</summary><p class="mt-4 text-sm leading-7 text-muted">The project is positioned on Hennur Main Road, North Bengaluru, with access to ORR, airport road corridors, tech parks, schools, healthcare, and lifestyle destinations.</p></details>
+        <details class="reveal group border border-gold/15 bg-white p-6"><summary class="cursor-pointer list-none text-sm uppercase tracking-[.16em] text-ink">What configurations are available?</summary><p class="mt-4 text-sm leading-7 text-muted">The planned configurations are 3 BHK, 3 BHK + Staff, and 4 BHK + Staff residences with large-format layouts.</p></details>
+        <details class="reveal group border border-gold/15 bg-white p-6"><summary class="cursor-pointer list-none text-sm uppercase tracking-[.16em] text-ink">Why is the project positioned around privacy?</summary><p class="mt-4 text-sm leading-7 text-muted">The concept includes a single tower with two private wings, limited homes per floor, near-private lift experience, dual balconies, and intelligent layout planning.</p></details>
+        <details class="reveal group border border-gold/15 bg-white p-6"><summary class="cursor-pointer list-none text-sm uppercase tracking-[.16em] text-ink">How can I get the brochure or exact pricing?</summary><p class="mt-4 text-sm leading-7 text-muted">Submit the enquiry form and the team can share the private briefing, brochure, unit availability, and updated pricing information.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="bg-white px-5 py-24 md:px-14 md:py-32">
+    <div class="mx-auto max-w-6xl">
+      <header class="mx-auto mb-14 max-w-4xl text-center">
+        <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">Private Briefing</span>
+        <h2 class="reveal luxury-title text-3xl font-light leading-tight md:text-4xl">Unlock the <em class="text-gold">private preview.</em></h2>
+        <div class="reveal mx-auto my-7 h-px w-14 bg-gold"></div>
+        <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">Register your interest to receive project details, floor plans, pricing updates, and appointment assistance for Codename Hennur.</p>
+      </header>
+      <div class="grid gap-14 md:grid-cols-2">
+        <div class="img-slot reveal relative flex h-72 items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-soft md:h-80"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">Upload Contact / Lifestyle Image</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
+        <form class="reveal relative border border-gold/20 bg-soft p-8 md:p-12">
+        <div class="absolute right-0 top-0 h-20 w-20 border-r border-t border-gold"></div>
+        <div class="grid gap-5 md:grid-cols-2">
+          <input class="border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="First Name" />
+          <input class="border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Last Name" />
+        </div>
+        <input class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Mobile Number" />
+        <input class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Email Address" />
+        <select class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm text-muted outline-none focus:border-gold"><option>Interested Configuration</option><option>3 BHK</option><option>3 BHK + Staff</option><option>4 BHK + Staff</option></select>
+        <textarea rows="4" class="mt-5 w-full resize-none border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Message"></textarea>
+        <button type="button" class="mt-8 border border-gold px-10 py-4 text-xs uppercase tracking-[.25em] text-gold transition hover:bg-gold hover:text-white">Submit Enquiry</button>
+      </form>
+      </div>
+    </div>
+  </section>
+
+ <footer class="border-t border-gold/20 bg-white px-5 py-10 text-center md:px-14">
+  <div class="mx-auto flex max-w-7xl flex-col items-center justify-center gap-5">
+
+    <!-- LOGO -->
+    <img 
+      src="images/logo.png" 
+      alt="Codename Hennur Logo" 
+      class="h-14 w-auto object-contain"
+    />
+
+    <!-- DISCLAIMER -->
+    <p class="mx-auto max-w-3xl text-xs leading-6 text-muted">
+      Disclaimer: This is a conceptual landing page template. All distances, projections,
+      pricing, launch dates, and specifications should be verified and updated by the
+      project team before publishing.
+    </p>
+
+    <!-- COPYRIGHT -->
+    <p class="text-xs uppercase tracking-[.18em] text-muted">
+      © 2026 Codename Hennur. All Rights Reserved.
+    </p>
+
+  </div>
+</footer>
+
+  <!-- Floating WhatsApp -->
+  <a
+    href="https://wa.me/917996363133"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="fixed bottom-6 right-4 z-[300] hidden max-w-[200px] flex-col items-center gap-0.5 rounded-full bg-gold px-4 py-3 text-center shadow-xl ring-2 ring-white/90 md:flex md:bottom-8 md:right-6"
+    aria-label="Open WhatsApp to chat"
+  >
+    <span class="text-[11px] font-bold uppercase tracking-[.16em] text-white">WhatsApp</span>
+    <span class="text-[11px] font-bold tabular-nums tracking-wide text-white/95">+91 79963 63133</span>
+  </a>
+  <div class="fixed bottom-0 left-0 z-[300] grid w-full grid-cols-2 border-t border-gold/20 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-2xl backdrop-blur md:hidden">
+    <a href="#contact" class="py-4 text-center text-xs font-medium uppercase tracking-[.18em] text-gold">Get Price</a>
+    <a href="https://wa.me/917996363133" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-0.5 bg-gold py-3 text-white">
+      <span class="text-xs font-bold uppercase tracking-[.18em]">WhatsApp</span>
+      <span class="text-[10px] font-bold tabular-nums tracking-wide text-white/95">+91 79963 63133</span>
+    </a>
+  </div>
+
+  <script>
+    window.addEventListener('load', () => {
+      const nav = document.getElementById('mainNav');
+      const progress = document.getElementById('scrollProgress');
+      window.addEventListener('scroll', () => {
+        nav.classList.toggle('bg-white/95', window.scrollY > 60);
+        nav.classList.toggle('shadow-lg', window.scrollY > 60);
+        nav.classList.toggle('backdrop-blur-xl', window.scrollY > 60);
+        nav.classList.toggle('py-4', window.scrollY > 60);
+        const h = document.documentElement.scrollHeight - innerHeight;
+        progress.style.width = ((scrollY / h) * 100) + '%';
+      });
+
+      const cursor = document.getElementById('cursor');
+      const ring = document.getElementById('cursorRing');
+      let mx = 0, my = 0, rx = 0, ry = 0;
+      document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      function animateCursor(){
+        rx += (mx - rx) * 0.12; ry += (my - ry) * 0.12;
+        cursor.style.left = mx + 'px'; cursor.style.top = my + 'px';
+        ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      const slides = document.querySelectorAll('.hero-slide');
+      const dots = document.querySelectorAll('.dot');
+      let current = 0;
+      function goSlide(n){
+        slides[current].classList.remove('active'); dots[current].classList.remove('bg-gold','w-12'); dots[current].classList.add('bg-gold/40','w-6');
+        current = n;
+        slides[current].classList.add('active'); dots[current].classList.add('bg-gold','w-12'); dots[current].classList.remove('bg-gold/40','w-6');
+      }
+      dots.forEach(d => d.addEventListener('click', () => goSlide(Number(d.dataset.index))));
+      setInterval(() => goSlide((current + 1) % slides.length), 5000);
+
+      document.querySelectorAll('.img-slot input[type=file]').forEach(input => {
+        input.addEventListener('change', function(){
+          const file = this.files[0]; if(!file) return;
+          const reader = new FileReader();
+          reader.onload = e => {
+            const slot = this.closest('.img-slot');
+            const img = slot.querySelector('img');
+            img.src = e.target.result;
+            slot.classList.add('has-image');
+          };
+          reader.readAsDataURL(file);
+        });
+      });
+
+      if (window.gsap) {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.to('.hero-anim', { opacity: 1, y: 0, duration: 1, stagger: .14, ease: 'power3.out' });
+        gsap.utils.toArray('.reveal').forEach(el => {
+          gsap.to(el, { opacity: 1, y: 0, duration: .9, ease: 'power3.out', scrollTrigger: { trigger: el, start: 'top 86%' } });
+        });
+      } else {
+        document.querySelectorAll('.hero-anim, .reveal').forEach(el => { el.style.opacity = 1; el.style.transform = 'none'; });
+      }
+    });
+  </script>
+</body>
+</html>
