@@ -2,13 +2,14 @@
 <html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Codename Hennur — The Art Of Private Living</title>
   <meta name="description" content="Codename Hennur — private luxury residences coming soon to Hennur Main Road, North Bengaluru." />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Jost:wght@200;300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -101,6 +102,54 @@
       color: #000000 !important;
     }
 
+    /* Mobile: readable text sizing, no horizontal bleed, touch-friendly */
+    @media (max-width: 767px) {
+      html {
+        -webkit-text-size-adjust: 100%;
+        overflow-x: clip;
+      }
+      body {
+        overflow-x: clip;
+      }
+      button,
+      .nav-mobile-link,
+      .dot {
+        touch-action: manipulation;
+      }
+    }
+
+    /* Hero section typography palette: black + gold */
+    #hero .hero-anim,
+    #hero .hero-anim *,
+    #hero form,
+    #hero form * {
+      color: #000000 !important;
+    }
+    #hero .text-gold,
+    #hero span.text-gold {
+      color: #c29c60 !important;
+    }
+    #hero a.border-white\/70 {
+      color: #000000 !important;
+    }
+    #hero a.border-white\/70:hover {
+      color: #c29c60 !important;
+    }
+    #hero input::placeholder,
+    #hero textarea::placeholder {
+      color: rgba(0, 0, 0, 0.65) !important;
+    }
+    #hero option {
+      color: #111111 !important;
+      background-color: #ffffff;
+    }
+
+    /* Ticker bar — keep white copy */
+    #tickerBar,
+    #tickerBar * {
+      color: #ffffff !important;
+    }
+
     /* Amenities dark section — override global black text */
     #amenities,
     #amenities h2,
@@ -117,21 +166,97 @@
     #amenities .amenities-card-label {
       color: #ffffff !important;
     }
+
+    /* Mobile menu */
+    html.menu-open,
+    html.menu-open body {
+      overflow: hidden;
+    }
+    #navMenuToggle .nav-bar {
+      transform-origin: center;
+      transition: transform 0.25s ease, opacity 0.2s ease;
+    }
+    #navMenuToggle.is-open .nav-bar:nth-child(1) {
+      transform: translateY(6px) rotate(45deg);
+    }
+    #navMenuToggle.is-open .nav-bar:nth-child(2) {
+      opacity: 0;
+    }
+    #navMenuToggle.is-open .nav-bar:nth-child(3) {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* FINAL NAV RESPONSIVE FIX: mobile + tablet spacing */
+    #mainNav {
+      top: 0;
+      background: rgba(248, 248, 248, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.07);
+    }
+    @media (min-width: 1024px) {
+      #mainNav {
+        top: 0;
+        background: rgba(248, 248, 248, 0.82);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: none;
+      }
+      #mainNav.bg-white\/95 {
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+      }
+      #hero > .relative.z-20 {
+        padding-top: 7.5rem;
+      }
+    }
+    @media (max-width: 1023px) {
+      #mainNav {
+        padding-top: max(0.55rem, env(safe-area-inset-top, 0px));
+        padding-bottom: 0.55rem;
+      }
+      #mainNav > div {
+        min-height: 3rem;
+      }
+      #mobileNavPanel {
+        padding-top: 0;
+      }
+      #mobileNavDrawer {
+        padding-top: env(safe-area-inset-top, 0px);
+      }
+      #hero > .relative.z-20 {
+        padding-top: max(7.25rem, env(safe-area-inset-top, 0px));
+      }
+    }
+
   </style>
 </head>
 
-<body class="bg-white text-black font-sanslux font-bold overflow-x-hidden selection:bg-gold selection:text-black">
+<body class="bg-white pb-[calc(4.5rem+env(safe-area-inset-bottom,0px))] text-black font-sanslux font-bold overflow-x-clip selection:bg-gold selection:text-black md:pb-0">
   <div id="scrollProgress" class="fixed left-0 top-0 z-[9999] h-[3px] w-0 bg-gold"></div>
   <div id="cursor" class="cursor-dot fixed left-0 top-0 z-[9998] h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold mix-blend-multiply"></div>
   <div id="cursorRing" class="cursor-ring fixed left-0 top-0 z-[9997] h-9 w-9 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold/50"></div>
 
   <!-- NAV -->
-  <nav id="mainNav" class="fixed left-0 top-0 z-[200] w-full px-5 py-5 transition-all duration-500 md:px-14 md:py-7">
-    <div class="relative mx-auto flex max-w-[1440px] items-center justify-center">
-      <a href="#hero" class="absolute left-0 top-1/2 flex -translate-y-1/2 items-center">
-        <img src="images/logo.png" alt="Codename Hennur Logo" class="h-12 w-auto object-contain md:h-16" />
+  <nav id="mainNav" class="fixed left-0 top-0 z-[200] w-full px-4 py-2 pt-[max(0.55rem,env(safe-area-inset-top,0px))] transition-all duration-500 sm:px-5 sm:py-2 lg:px-14 lg:py-3">
+    <div class="relative mx-auto flex min-h-[3rem] max-w-[1440px] items-center justify-between lg:min-h-[3.75rem] lg:justify-center">
+      <a href="#hero" class="relative z-[1] flex shrink-0 items-center lg:absolute lg:left-14 lg:top-1/2 lg:-translate-y-1/2">
+        <img src="images/logo.png" alt="Codename Hennur Logo" class="h-9 w-auto object-contain sm:h-10 lg:h-12" />
       </a>
-      <div class="hidden items-center justify-center gap-9 md:flex">
+
+      <div class="hidden items-center justify-center gap-9 lg:flex">
         <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#city">City</a>
         <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#corridor">Corridor</a>
         <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#location">Location</a>
@@ -139,11 +264,79 @@
         <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#amenities">Amenities</a>
         <a class="nav-link text-[11px] font-bold uppercase tracking-[.22em] text-black hover:text-gold" href="#contact">Contact</a>
       </div>
-      <a href="#contact" class="absolute right-0 top-1/2 -translate-y-1/2 border border-gold px-4 py-2 text-[10px] font-bold uppercase tracking-[.22em] text-black transition hover:bg-gold hover:text-white md:px-6 md:py-3">
-        Express Interest
-      </a>
+
+      <div class="flex shrink-0 items-center gap-2 lg:absolute lg:right-14 lg:top-1/2 lg:-translate-y-1/2 lg:gap-0">
+        <button
+          type="button"
+          id="navMenuToggle"
+          class="flex h-11 w-11 flex-col items-center justify-center gap-1.5 rounded-md border border-gold/50 bg-white/95 text-black shadow-md lg:hidden"
+          aria-expanded="false"
+          aria-controls="mobileNavPanel"
+          aria-label="Open navigation menu"
+        >
+          <span class="nav-bar block h-0.5 w-5 bg-current"></span>
+          <span class="nav-bar block h-0.5 w-5 bg-current"></span>
+          <span class="nav-bar block h-0.5 w-5 bg-current"></span>
+        </button>
+        <a
+          href="#contact"
+          class="hidden border bg-gold px-4 py-2 text-[10px] font-bold uppercase tracking-[.22em] text-black transition hover:white hover:text-black lg:inline-block lg:px-6 lg:py-3"
+        >
+          Express Interest
+        </a>
+      </div>
     </div>
   </nav>
+
+  <!-- Mobile menu drawer -->
+  <div
+    id="mobileNavPanel"
+    class="pointer-events-none fixed inset-0 z-[350] opacity-0 transition-opacity duration-300 lg:hidden"
+    aria-hidden="true"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Site navigation"
+  >
+    <button
+      type="button"
+      id="mobileNavBackdrop"
+      class="absolute inset-0 bg-black/50 opacity-0 transition-opacity duration-300"
+      aria-label="Close menu"
+      tabindex="-1"
+    ></button>
+    <div
+      id="mobileNavDrawer"
+      class="absolute right-0 top-0 flex h-[100dvh] max-h-[100dvh] w-[min(100vw,20rem)] max-w-full translate-x-full flex-col bg-paper pt-[env(safe-area-inset-top,0px)] shadow-2xl transition-transform duration-300 ease-out"
+    >
+      <div class="flex items-center justify-between border-b border-gold/25 px-5 py-4">
+        <span class="text-[10px] font-bold uppercase tracking-[.28em] text-gold">Navigate</span>
+        <button
+          type="button"
+          id="navMenuClose"
+          class="flex h-10 w-10 items-center justify-center rounded-md border border-gold/40 text-lg leading-none text-black transition hover:bg-gold/10"
+          aria-label="Close navigation menu"
+        >
+          ×
+        </button>
+      </div>
+      <div class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-y-contain px-2 py-2">
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#city">City</a>
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#corridor">Corridor</a>
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#location">Location</a>
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#residence">Residence</a>
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#amenities">Amenities</a>
+        <a class="nav-mobile-link block min-h-[48px] border-b border-gold/15 px-4 py-4 text-[12px] font-bold uppercase tracking-[.2em] text-black transition hover:bg-gold/10" href="#contact">Contact</a>
+      </div>
+      <div class="border-t border-gold/25 p-5">
+        <a
+          href="#contact"
+          class="nav-mobile-link block w-full border border-gold bg-gold py-3.5 text-center text-[10px] font-bold uppercase tracking-[.22em] text-black transition hover:bg-goldLight"
+        >
+          Express Interest
+        </a>
+      </div>
+    </div>
+  </div>
 
 <!-- HERO -->
 <section id="hero" class="relative flex min-h-screen items-center overflow-hidden">
@@ -179,7 +372,7 @@
   </div>
 
   <!-- HERO CONTENT -->
-  <div class="relative z-20 mx-auto grid w-full max-w-[1440px] gap-12 px-5 py-28 text-center md:grid-cols-[1.15fr_.85fr] md:items-center md:px-14 md:py-32 md:text-left">
+  <div class="relative z-20 mx-auto grid w-full max-w-[1440px] gap-10 px-4 pb-28 pt-[max(8rem,env(safe-area-inset-top,0px))] text-center sm:px-5 sm:gap-12 sm:pb-32 sm:pt-28 md:grid-cols-[1.15fr_.85fr] md:items-center md:gap-12 md:px-14 md:py-32 md:pt-32 md:text-left">
     
     <!-- LEFT CONTENT -->
     <div class="mx-auto max-w-3xl text-white md:mx-0">
@@ -260,15 +453,15 @@
   </div>
 
   <!-- SLIDER DOTS -->
-  <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2">
-    <button class="dot h-0.5 w-12 bg-gold" data-index="0"></button>
-    <button class="dot h-0.5 w-6 bg-gold/40" data-index="1"></button>
-    <button class="dot h-0.5 w-6 bg-gold/40" data-index="2"></button>
+  <div class="absolute bottom-24 left-1/2 z-30 flex -translate-x-1/2 gap-3 md:bottom-10 md:gap-2">
+    <button type="button" class="dot flex min-h-[44px] min-w-[44px] items-center justify-center bg-transparent p-2 md:min-h-0 md:min-w-0 md:p-0" data-index="0" aria-label="Slide 1"><span class="block h-0.5 w-12 bg-gold md:w-12"></span></button>
+    <button type="button" class="dot flex min-h-[44px] min-w-[44px] items-center justify-center bg-transparent p-2 md:min-h-0 md:min-w-0 md:p-0" data-index="1" aria-label="Slide 2"><span class="block h-0.5 w-6 bg-gold/40 md:w-6"></span></button>
+    <button type="button" class="dot flex min-h-[44px] min-w-[44px] items-center justify-center bg-transparent p-2 md:min-h-0 md:min-w-0 md:p-0" data-index="2" aria-label="Slide 3"><span class="block h-0.5 w-6 bg-gold/40 md:w-6"></span></button>
   </div>
 
 </section>
   <!-- TICKER -->
-  <div class="overflow-hidden bg-gold py-3 whitespace-nowrap">
+  <div id="tickerBar" class="overflow-hidden bg-gold py-3 whitespace-nowrap">
     <div class="inline-flex animate-ticker text-[10px] font-medium uppercase tracking-[.25em] text-white">
       <span class="mx-8">Codename Hennur</span><span>◈</span><span class="mx-8">The Art of Private Living</span><span>◈</span><span class="mx-8">Hennur Main Road · North Bengaluru</span><span>◈</span><span class="mx-8">~200 Residences · 1 Tower · 2 Wings</span><span>◈</span><span class="mx-8">79.1% 5-Year Appreciation</span><span>◈</span><span class="mx-8">10 ft Ceilings · VRV Installed · Indoor Pool</span><span>◈</span>
       <span class="mx-8">Codename Hennur</span><span>◈</span><span class="mx-8">The Art of Private Living</span><span>◈</span><span class="mx-8">Hennur Main Road · North Bengaluru</span><span>◈</span><span class="mx-8">~200 Residences · 1 Tower · 2 Wings</span><span>◈</span><span class="mx-8">79.1% 5-Year Appreciation</span><span>◈</span><span class="mx-8">10 ft Ceilings · VRV Installed · Indoor Pool</span><span>◈</span>
@@ -276,14 +469,12 @@
   </div>
 
   <!-- CITY -->
-<section id="city" class="bg-soft px-5 py-24 md:px-14 md:py-32">
+<section id="city" class="bg-soft px-5 py-18 md:px-14 md:py-24">
   <div class="mx-auto max-w-7xl">
 
     <!-- CENTER HEADING -->
-    <header class="mx-auto mb-16 max-w-4xl text-center">
-      <span class="reveal mb-4 block text-[10px] uppercase tracking-[.32em] text-gold">
-        01 — The City
-      </span>
+    <header class="mx-auto mb-10 max-w-4xl text-center md:mb-12">
+      
 
       <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
         Bengaluru Where growth meets lifestyle.
@@ -301,7 +492,7 @@
     </header>
 
     <!-- CONTENT GRID -->
-    <div class="grid gap-12 md:grid-cols-[1.05fr_.95fr] md:items-center">
+    <div class="grid gap-8 md:grid-cols-[1.05fr_.95fr] md:items-start md:gap-10">
 
      <!-- LEFT IMAGE AREA -->
 <div class="reveal">
@@ -341,16 +532,16 @@
         </div>
 
         <!-- STATS -->
-        <div class="mt-9 grid grid-cols-2 gap-3">
+        <div class="mt-7 grid grid-cols-2 gap-3">
           <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
-            <div class="luxury-title text-3xl text-gold md:text-4xl">2nd</div>
+            <div class="luxury-title text-3xl text-gold md:text-4xl">Top Tier</div>
             <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
               City Momentum
             </p>
           </div>
 
           <div class="reveal border border-gold/15 bg-white p-5 text-center shadow-sm">
-            <div class="luxury-title text-3xl text-gold md:text-4xl">1st</div>
+            <div class="luxury-title text-3xl text-gold md:text-4xl">Premium</div>
             <p class="mt-2 text-[11px] uppercase tracking-[.16em] text-muted">
               Ease of Living
             </p>
@@ -378,14 +569,12 @@
 </section>
   <!-- CORRIDOR -->
 <!-- CORRIDOR -->
-<section id="corridor" class="bg-white px-5 py-24 md:px-14 md:py-32">
+<section id="corridor" class="bg-white px-5 py-16 md:px-14 md:py-24">
   <div class="mx-auto max-w-7xl">
 
     <!-- CENTER HEADING -->
-    <header class="mx-auto mb-16 max-w-4xl text-center">
-      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
-        02 — The Corridor
-      </span>
+    <header class="mx-auto mb-10 max-w-4xl text-center md:mb-12">
+     
 
       <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
         North <span class="text-gold">Bengaluru</span>
@@ -400,7 +589,7 @@
     </header>
 
     <!-- CORRIDOR INTRO WITHOUT IMAGE -->
-    <div class="reveal mx-auto max-w-5xl border border-gold/15 bg-soft p-8 text-center shadow-sm md:p-12">
+    <div class="reveal mx-auto max-w-5xl border border-gold/15 bg-soft p-7 text-center shadow-sm md:p-10">
       <h3 class="luxury-title text-2xl font-light leading-tight text-ink md:text-4xl">
         A growth corridor built for
         <span class="block text-gold">homebuyers and investors.</span>
@@ -414,7 +603,7 @@
     </div>
 
     <!-- MAIN STATS -->
-    <div class="mt-10 grid gap-4 md:grid-cols-2">
+    <div class="mt-8 grid gap-4 md:grid-cols-2">
       <div class="reveal border border-gold/15 bg-white p-8 text-center shadow-sm md:p-10">
         <div class="luxury-title text-5xl text-gold md:text-6xl">79.1%</div>
         <p class="mt-4 text-xs uppercase tracking-[.18em] text-muted">
@@ -455,14 +644,14 @@
     </div>
 
     <!-- LOCATION STRIP -->
-    <div class="reveal mt-16 border-y border-gold/15 py-8 text-center">
+    <div class="reveal mt-12 border-y border-gold/15 py-7 text-center">
       <p class="text-sm uppercase leading-7 tracking-[.22em] text-muted">
         Hennur · Thanisandra · Hebbal · Jakkur · Kothanur · Bagalur · Kalyan Nagar · HBR Layout
       </p>
     </div>
 
     <!-- INFRASTRUCTURE PIPELINE -->
-    <div class="mt-20 text-center">
+    <div class="mt-14 text-center md:mt-16">
       <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
         Connectivity Advantage
       </span>
@@ -480,98 +669,116 @@
     <!-- INFRA CARDS -->
     <div class="mt-10 grid gap-4 md:grid-cols-3">
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Bengaluru Business Corridor
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-road text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Bengaluru Business Corridor
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           PRR Orbital Route
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           A planned orbital route designed to improve cross-city access and strengthen
           connectivity across key growth zones.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           74 km orbital route
         </p>
       </article>
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Elevated Corridor
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-bridge text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Elevated Corridor
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           Nagavara–Bagalur Access
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           Proposed elevated connectivity improving movement through the North Bengaluru
           residential and airport corridor.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           17.9 km corridor
         </p>
       </article>
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Namma Metro
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-train-subway text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Namma Metro
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           Airport Metro Line
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           Metro connectivity towards the airport corridor is expected to improve access
           between key business and residential hubs.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           58.19 km · 32 stations
         </p>
       </article>
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Suburban Rail
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-train text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Suburban Rail
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           BSRP Network
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           A city-wide suburban rail network planned to create stronger multi-modal
           connectivity across Bengaluru.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           148 km network
         </p>
       </article>
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Metro Expansion
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-route text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Metro Expansion
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           Pink & Yellow Lines
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           Upcoming metro expansion is expected to improve access to important employment
           and lifestyle zones.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           Expanding city access
         </p>
       </article>
 
-      <article class="reveal border border-gold/10 bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl">
-        <p class="text-[10px] uppercase tracking-[.22em] text-gold">
-          Direct Connectivity
-        </p>
-        <h4 class="luxury-title mt-4 text-xl text-ink md:text-2xl">
+      <article class="reveal flex h-full flex-col border border-gold/10 bg-soft p-7 shadow-sm transition hover:-translate-y-1 hover:border-gold/50 hover:shadow-xl md:p-8">
+        <div class="mb-4 flex items-center gap-3">
+          <i class="fa-solid fa-plane-departure text-sm text-gold"></i>
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">
+            Direct Connectivity
+          </p>
+        </div>
+        <h4 class="luxury-title text-xl text-ink md:text-2xl">
           ORR & Airport Access
         </h4>
-        <p class="mt-4 text-sm leading-7 text-muted">
+        <p class="mt-3 text-sm leading-7 text-muted">
           Strong access to Manyata Tech Park, ORR, airport road, and major business
           corridors increases residential demand.
         </p>
-        <p class="mt-5 text-xs uppercase tracking-[.16em] text-gold/80">
+        <p class="mt-auto pt-5 text-xs uppercase tracking-[.16em] text-gold/80">
           Work-life convenience
         </p>
       </article>
@@ -588,9 +795,7 @@
 
     <!-- CENTER HEADING -->
     <header class="mx-auto mb-14 max-w-4xl text-center">
-      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
-        03 — The Location
-      </span>
+      
 
       <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
         Hennur Main Road
@@ -817,9 +1022,7 @@
 
     <!-- CENTER HEADING -->
     <header class="mx-auto mb-14 max-w-4xl text-center">
-      <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">
-        04 — The Residence
-      </span>
+     
 
       <h2 class="reveal luxury-title text-3xl font-light leading-tight text-ink md:text-5xl">
         The Residence Elevated.
@@ -1037,7 +1240,6 @@
   <section id="amenities" class="bg-[#0c0c0c] px-5 py-24 text-white md:px-14 md:py-32">
     <div class="mx-auto max-w-7xl">
       <header class="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-        <span class="reveal mb-3 block text-[10px] uppercase tracking-[.32em] text-gold">07 — Amenities</span>
         <h2 class="reveal luxury-title text-3xl font-light leading-tight text-white md:text-4xl">Life beyond your <em class="text-gold">front door.</em></h2>
         <div class="reveal mx-auto mt-7 h-px w-14 bg-gold"></div>
         <p class="reveal amenities-lead mx-auto mt-6 max-w-2xl text-sm leading-relaxed">Podium-level experiences designed for every generation — from quiet corners to shared celebration.</p>
@@ -1152,19 +1354,40 @@
         <div class="reveal mx-auto my-7 h-px w-14 bg-gold"></div>
         <p class="reveal mx-auto max-w-3xl text-[15px] leading-8 text-muted">Register your interest to receive project details, floor plans, pricing updates, and appointment assistance for Codename Hennur.</p>
       </header>
-      <div class="grid gap-14 md:grid-cols-2">
-        <div class="img-slot reveal relative flex h-72 items-center justify-center overflow-hidden border-2 border-dashed border-gold/30 bg-soft md:h-80"><img class="hidden h-full w-full object-cover"/><div class="slot-text text-center text-gold"><div class="text-4xl">⊕</div><p class="mt-2 text-xs uppercase tracking-[.2em]">Upload Contact / Lifestyle Image</p></div><input class="absolute inset-0 cursor-pointer opacity-0" type="file" accept="image/*"/></div>
-        <form class="reveal relative border border-gold/20 bg-soft p-8 md:p-12">
-        <div class="absolute right-0 top-0 h-20 w-20 border-r border-t border-gold"></div>
-        <div class="grid gap-5 md:grid-cols-2">
-          <input class="border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="First Name" />
-          <input class="border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Last Name" />
+      <div class="grid items-start gap-8 md:grid-cols-2 md:gap-10">
+        <div class="reveal border border-gold/20 bg-soft p-7 shadow-sm md:p-10">
+          <p class="text-[10px] uppercase tracking-[.22em] text-gold">Contact Details</p>
+          <h3 class="luxury-title mt-3 text-2xl text-ink md:text-3xl">Get in touch directly</h3>
+
+          <div class="mt-8 space-y-6">
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-phone mt-1 text-gold"></i>
+              <div>
+                <p class="text-[10px] uppercase tracking-[.18em] text-muted">Contact Number</p>
+                <a href="tel:+917996363133" class="mt-1 block text-base text-ink hover:text-gold">+91 79963 63133</a>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <i class="fa-solid fa-location-dot mt-1 text-gold"></i>
+              <div>
+                <p class="text-[10px] uppercase tracking-[.18em] text-muted">Location</p>
+                <p class="mt-1 text-base leading-7 text-ink">Hennur Main Road, North Bengaluru</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <input class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Mobile Number" />
-        <input class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Email Address" />
-        <select class="mt-5 w-full border-b border-gold/30 bg-transparent py-4 text-sm text-muted outline-none focus:border-gold"><option>Interested Configuration</option><option>3 BHK</option><option>3 BHK + Staff</option><option>4 BHK + Staff</option></select>
-        <textarea rows="4" class="mt-5 w-full resize-none border-b border-gold/30 bg-transparent py-4 text-sm outline-none focus:border-gold" placeholder="Message"></textarea>
-        <button type="button" class="mt-8 border border-gold px-10 py-4 text-xs uppercase tracking-[.25em] text-gold transition hover:bg-gold hover:text-white">Submit Enquiry</button>
+        <form class="reveal relative w-full max-w-xl border border-gold/20 bg-soft p-6 md:ml-auto md:p-8">
+        <div class="absolute right-0 top-0 h-20 w-20 border-r border-t border-gold"></div>
+        <div class="grid gap-3 md:grid-cols-2">
+          <input class="w-full border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 outline-none focus:border-gold" placeholder="First Name" />
+          <input class="w-full border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 outline-none focus:border-gold" placeholder="Last Name" />
+        </div>
+        <input class="mt-3 w-full border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 outline-none focus:border-gold" placeholder="Mobile Number" />
+        <input class="mt-3 w-full border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 outline-none focus:border-gold" placeholder="Email Address" />
+        <select class="mt-3 w-full border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 text-muted outline-none focus:border-gold"><option>Interested Configuration</option><option>3 BHK</option><option>3 BHK + Staff</option><option>4 BHK + Staff</option></select>
+        <textarea rows="3" class="mt-3 w-full resize-none border-b border-gold/30 bg-transparent py-2.5 text-sm leading-6 outline-none focus:border-gold" placeholder="Message"></textarea>
+        <button type="button" class="mt-5 border border-gold px-9 py-3 text-xs uppercase tracking-[.25em] text-gold transition hover:bg-gold hover:text-white">Submit Enquiry</button>
       </form>
       </div>
     </div>
@@ -1195,22 +1418,32 @@
   </div>
 </footer>
 
-  <!-- Floating WhatsApp -->
+  <!-- Floating WhatsApp (icon only — navbar untouched) -->
   <a
     href="https://wa.me/917996363133"
     target="_blank"
     rel="noopener noreferrer"
-    class="fixed bottom-6 right-4 z-[300] hidden max-w-[200px] flex-col items-center gap-0.5 rounded-full bg-gold px-4 py-3 text-center shadow-xl ring-2 ring-white/90 md:flex md:bottom-8 md:right-6"
-    aria-label="Open WhatsApp to chat"
+    class="fixed bottom-20 right-4 z-[300] hidden h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg ring-2 ring-white/90 transition hover:bg-[#20bd5a] hover:shadow-xl md:bottom-8 md:right-6 md:flex md:h-16 md:w-16"
+    aria-label="WhatsApp chat +91 7996363133"
   >
-    <span class="text-[11px] font-bold uppercase tracking-[.16em] text-white">WhatsApp</span>
-    <span class="text-[11px] font-bold tabular-nums tracking-wide text-white/95">+91 79963 63133</span>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8 md:h-9 md:w-9" aria-hidden="true">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+    </svg>
+    <span class="sr-only">WhatsApp +91 7996363133</span>
   </a>
-  <div class="fixed bottom-0 left-0 z-[300] grid w-full grid-cols-2 border-t border-gold/20 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-2xl backdrop-blur md:hidden">
+  <div class="fixed bottom-0 left-0 z-[280] grid w-full grid-cols-2 border-t border-gold/20 bg-white/95 pb-[env(safe-area-inset-bottom)] shadow-2xl backdrop-blur md:hidden">
     <a href="#contact" class="py-4 text-center text-xs font-medium uppercase tracking-[.18em] text-gold">Get Price</a>
-    <a href="https://wa.me/917996363133" target="_blank" rel="noopener noreferrer" class="flex flex-col items-center justify-center gap-0.5 bg-gold py-3 text-white">
-      <span class="text-xs font-bold uppercase tracking-[.18em]">WhatsApp</span>
-      <span class="text-[10px] font-bold tabular-nums tracking-wide text-white/95">+91 79963 63133</span>
+    <a
+      href="https://wa.me/917996363133"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="flex items-center justify-center bg-[#25D366] py-4 text-white transition active:bg-[#1da851]"
+      aria-label="WhatsApp +91 7996363133"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-8 w-8" aria-hidden="true">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.881 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" />
+      </svg>
+      <span class="sr-only">WhatsApp +91 7996363133</span>
     </a>
   </div>
 
@@ -1222,10 +1455,60 @@
         nav.classList.toggle('bg-white/95', window.scrollY > 60);
         nav.classList.toggle('shadow-lg', window.scrollY > 60);
         nav.classList.toggle('backdrop-blur-xl', window.scrollY > 60);
-        nav.classList.toggle('py-4', window.scrollY > 60);
+        nav.classList.toggle('py-3', window.scrollY > 60);
         const h = document.documentElement.scrollHeight - innerHeight;
         progress.style.width = ((scrollY / h) * 100) + '%';
       });
+
+      (function mobileNav() {
+        const toggle = document.getElementById('navMenuToggle');
+        const closeBtn = document.getElementById('navMenuClose');
+        const panel = document.getElementById('mobileNavPanel');
+        const backdrop = document.getElementById('mobileNavBackdrop');
+        const drawer = document.getElementById('mobileNavDrawer');
+        if (!toggle || !closeBtn || !panel || !backdrop || !drawer) return;
+
+        function openMenu() {
+          document.documentElement.classList.add('menu-open');
+          panel.setAttribute('aria-hidden', 'false');
+          toggle.setAttribute('aria-expanded', 'true');
+          toggle.setAttribute('aria-label', 'Close navigation menu');
+          toggle.classList.add('is-open');
+          panel.classList.remove('pointer-events-none', 'opacity-0');
+          panel.classList.add('pointer-events-auto', 'opacity-100');
+          backdrop.classList.remove('opacity-0');
+          backdrop.classList.add('opacity-100');
+          drawer.classList.remove('translate-x-full');
+          closeBtn.focus();
+        }
+
+        function closeMenu() {
+          document.documentElement.classList.remove('menu-open');
+          panel.setAttribute('aria-hidden', 'true');
+          toggle.setAttribute('aria-expanded', 'false');
+          toggle.setAttribute('aria-label', 'Open navigation menu');
+          toggle.classList.remove('is-open');
+          panel.classList.add('pointer-events-none', 'opacity-0');
+          panel.classList.remove('pointer-events-auto', 'opacity-100');
+          backdrop.classList.add('opacity-0');
+          backdrop.classList.remove('opacity-100');
+          drawer.classList.add('translate-x-full');
+        }
+
+        toggle.addEventListener('click', () => {
+          if (toggle.classList.contains('is-open')) closeMenu();
+          else openMenu();
+        });
+        closeBtn.addEventListener('click', closeMenu);
+        backdrop.addEventListener('click', closeMenu);
+        document.querySelectorAll('.nav-mobile-link').forEach((a) => a.addEventListener('click', closeMenu));
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape' && toggle.classList.contains('is-open')) closeMenu();
+        });
+        window.addEventListener('resize', () => {
+          if (window.innerWidth >= 1024 && toggle.classList.contains('is-open')) closeMenu();
+        });
+      })();
 
       const cursor = document.getElementById('cursor');
       const ring = document.getElementById('cursorRing');
@@ -1243,9 +1526,19 @@
       const dots = document.querySelectorAll('.dot');
       let current = 0;
       function goSlide(n){
-        slides[current].classList.remove('active'); dots[current].classList.remove('bg-gold','w-12'); dots[current].classList.add('bg-gold/40','w-6');
+        slides[current].classList.remove('active');
+        const prevBar = dots[current].querySelector('span');
+        if (prevBar) {
+          prevBar.classList.remove('w-12', 'bg-gold');
+          prevBar.classList.add('w-6', 'bg-gold/40');
+        }
         current = n;
-        slides[current].classList.add('active'); dots[current].classList.add('bg-gold','w-12'); dots[current].classList.remove('bg-gold/40','w-6');
+        slides[current].classList.add('active');
+        const bar = dots[current].querySelector('span');
+        if (bar) {
+          bar.classList.add('w-12', 'bg-gold');
+          bar.classList.remove('w-6', 'bg-gold/40');
+        }
       }
       dots.forEach(d => d.addEventListener('click', () => goSlide(Number(d.dataset.index))));
       setInterval(() => goSlide((current + 1) % slides.length), 5000);
